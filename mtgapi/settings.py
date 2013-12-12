@@ -49,11 +49,14 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'dcors.dcorsmiddleware.CorsMiddleware'
 )
 
 ROOT_URLCONF = 'mtgapi.urls'
 
 WSGI_APPLICATION = 'mtgapi.wsgi.application'
+
+CORS_ALLOW_ORIGIN = '*'
 
 
 # Database
