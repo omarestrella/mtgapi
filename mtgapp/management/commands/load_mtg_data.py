@@ -56,7 +56,7 @@ class Command(BaseCommand):
 
             default_data = intersection(default_card_keys, card)
             default_data.update({
-                'set': card_set,
+                'card_set': card_set,
                 'type_name': card['type'],
                 'image_name': card['imageName']
             })

@@ -45,7 +45,7 @@ class Card(models.Model):
 
     name = models.CharField(max_length=255)
     text = models.TextField()
-    set = models.ForeignKey(CardSet, blank=True, null=True)
+    card_set = models.ForeignKey(CardSet, blank=True, null=True)
     cmc = models.PositiveSmallIntegerField(blank=True, null=True)
     type_name = models.CharField(max_length=255)
     types = models.ManyToManyField(CardType, blank=True, null=True, related_name='card')

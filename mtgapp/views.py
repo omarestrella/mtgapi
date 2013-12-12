@@ -10,10 +10,7 @@ def non_empty_split(s):
 
 class CardViewSet(ModelViewSet):
     model = models.Card
-    serializer_class = serializers.CardSerializer
-    paginate_by = 25
-    paginate_by_param = 'page_size'
-    max_paginate_by = 100
+    #serializer_class = serializers.CardSerializer
     search_fields = ('name', 'text',)
 
     def name_filter(self, queryset, filter_field):
@@ -31,8 +28,14 @@ class CardViewSet(ModelViewSet):
     def set_filter(self, queryset):
         set = self.request.QUERY_PARAMS.get('set', '')
         if set and len(set) == 3:
-            return queryset.filter(set__code__iexact=set)
+            return queryset.filter(card_set__code__iexact=set)
         return queryset
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return serializers.LimitedCardSerializer
+        else:
+            return serializers.CardSerializer
 
     def get_queryset(self):
         queryset = models.Card.objects.all()
