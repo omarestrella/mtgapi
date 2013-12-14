@@ -55,6 +55,7 @@ class Card(models.Model):
     power = models.CharField(max_length=3, blank=True, null=True)
     toughness = models.CharField(max_length=3, blank=True, null=True)
     image_name = models.CharField(max_length=255)
+    multiverse_id = models.IntegerField()
 
     @property
     def is_equipment(self):

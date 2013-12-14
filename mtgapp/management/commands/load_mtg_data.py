@@ -58,7 +58,8 @@ class Command(BaseCommand):
             default_data.update({
                 'card_set': card_set,
                 'type_name': card['type'],
-                'image_name': card['imageName']
+                'image_name': card['imageName'],
+                'multiverse_id': card['multiverseid']
             })
 
             card = models.Card.objects.create(**default_data)

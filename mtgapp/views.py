@@ -10,7 +10,9 @@ def non_empty_split(s):
 
 class CardViewSet(ModelViewSet):
     model = models.Card
-    #serializer_class = serializers.CardSerializer
+    paginate_by = 75
+    paginate_by_param = 'page'
+    max_paginate_by = 150
     search_fields = ('name', 'text',)
 
     def name_filter(self, queryset, filter_field):
