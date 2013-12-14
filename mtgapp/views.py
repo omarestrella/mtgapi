@@ -33,6 +33,12 @@ class CardViewSet(ModelViewSet):
             return queryset.filter(card_set__code__iexact=set)
         return queryset
 
+    def cmc_filter(self, queryset):
+        cmc = self.request.QUERY_PARAMS.get('cmc', '');
+        if cmc:
+            return queryset.filter(cmc=cmc)
+        return queryset
+
     def get_serializer_class(self):
         if self.action == 'list':
             return serializers.LimitedCardSerializer
@@ -44,4 +50,5 @@ class CardViewSet(ModelViewSet):
         queryset = self.name_filter(queryset, 'colors')
         queryset = self.name_filter(queryset, 'types')
         queryset = self.set_filter(queryset)
+        queryset = self.cmc_filter(queryset)
         return queryset.order_by('name')
