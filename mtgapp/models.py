@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class CardSet(models.Model):
@@ -63,3 +64,15 @@ class Card(models.Model):
 
     def __unicode__(self):
         return u'{}'.format(self.name)
+
+
+class Deck(models.Model):
+    user = models.ForeignKey(User)
+    title = models.CharField(max_length=255)
+    private = models.BooleanField(default=False)
+
+
+class DeckCard(models.Model):
+    card = models.ForeignKey(Card)
+    count = models.PositiveSmallIntegerField()
+    deck = models.ForeignKey(Deck, related_name='cards')

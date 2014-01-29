@@ -1,12 +1,22 @@
 from django.db.models import Q
 
+from rest_framework import permissions
+from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
 
 from mtgapp import models, serializers
 
 
+class IsOwnerOrReadOnly(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.user == request.user and not obj.private
+
+
 def non_empty_split(s):
     return filter(lambda f: len(f) > 0, s.split(','))
+
 
 class CardViewSet(ModelViewSet):
     model = models.Card
@@ -52,3 +62,26 @@ class CardViewSet(ModelViewSet):
         queryset = self.set_filter(queryset)
         queryset = self.cmc_filter(queryset)
         return queryset.order_by('name')
+
+
+class DeckViewSet(ModelViewSet):
+    model = models.Deck
+    permission_classes = (IsOwnerOrReadOnly,)
+    paginate_by = 15
+    paginate_by_param = 'page'
+    max_paginate_by = 150
+    search_fields = ('title',)
+
+    @action(methods=['POST'])
+    def add_cards(self, request, *args, **kwargs):
+        pass
+
+    @action(methods=['POST'])
+    def remove_cards(self, request, *args, **kwargs):
+        pass
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated():
+            queryset = models.Deck.objects.filter(user=self.request.user)
+            return queryset.order_by('title')
+        return []
