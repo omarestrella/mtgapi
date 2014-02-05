@@ -38,7 +38,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'south',
+    'corsheaders',
     'mtgapp',
 )
 
@@ -49,14 +51,19 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'dcors.dcorsmiddleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware'
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'mtgapp.auth.TokenModelBackend'
 )
 
 ROOT_URLCONF = 'mtgapi.urls'
 
 WSGI_APPLICATION = 'mtgapi.wsgi.application'
 
-CORS_ALLOW_ORIGIN = '*'
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 # Database

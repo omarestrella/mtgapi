@@ -10,5 +10,9 @@ router.register(r'deck', views.DeckViewSet)
 urlpatterns = router.urls
 
 urlpatterns += patterns('',
+    url(r'^auth/', views.AuthenticationView.as_view(), name='token_auth_view'),
+)
+
+urlpatterns += patterns('',
     url(r'^sse/test/$', views.SSETestView.as_view(), name='sse_test_view'),
 )
