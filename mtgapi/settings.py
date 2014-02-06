@@ -63,7 +63,12 @@ ROOT_URLCONF = 'mtgapi.urls'
 
 WSGI_APPLICATION = 'mtgapi.wsgi.application'
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_REGEX_WHITELIST = (
+    '^http?://(\w+\.)?herokuapp\.com$',
+    '^http?://(\w+\.)?localhost:\d+$'
+)
 
 
 # Database
@@ -115,5 +120,10 @@ REST_FRAMEWORK = {
 
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework.filters.SearchFilter',
+    ),
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication'
     )
 }

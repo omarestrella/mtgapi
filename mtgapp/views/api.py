@@ -130,6 +130,7 @@ class DeckViewSet(ModelViewSet):
         pass
 
     def get_queryset(self):
+        import ipdb; ipdb.set_trace()
         if self.request.user.is_authenticated():
             queryset = models.Deck.objects.filter(user=self.request.user)
             return queryset.order_by('title')
