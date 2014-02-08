@@ -17,3 +17,17 @@ class LimitedCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Card
         fields = ('id', 'name', 'text')
+
+
+class DeckCardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.DeckCard
+        fields = ('card', 'count')
+
+
+class DeckSerializer(serializers.ModelSerializer):
+    cards = DeckCardSerializer(many=True)
+
+    class Meta:
+        model = models.Deck
+        fields = ('id', 'title', 'private', 'user', 'cards')

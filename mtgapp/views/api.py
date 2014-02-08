@@ -115,6 +115,7 @@ class CardViewSet(ModelViewSet):
 
 class DeckViewSet(ModelViewSet):
     model = models.Deck
+    serializer_class = serializers.DeckSerializer
     permission_classes = (IsOwnerOrReadOnly,)
     paginate_by = 15
     paginate_by_param = 'page'
@@ -130,7 +131,6 @@ class DeckViewSet(ModelViewSet):
         pass
 
     def get_queryset(self):
-        import ipdb; ipdb.set_trace()
         if self.request.user.is_authenticated():
             queryset = models.Deck.objects.filter(user=self.request.user)
             return queryset.order_by('title')
