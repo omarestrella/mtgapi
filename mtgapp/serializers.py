@@ -20,6 +20,8 @@ class LimitedCardSerializer(serializers.ModelSerializer):
 
 
 class DeckCardSerializer(serializers.ModelSerializer):
+    card = CardSerializer()
+
     class Meta:
         model = models.DeckCard
         fields = ('card', 'count')

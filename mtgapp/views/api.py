@@ -123,12 +123,33 @@ class DeckViewSet(ModelViewSet):
     search_fields = ('title',)
 
     @action(methods=['POST'])
-    def add_cards(self, request, *args, **kwargs):
-        pass
-
-    @action(methods=['POST'])
-    def remove_cards(self, request, *args, **kwargs):
-        pass
+    def update_cards(self, request, *args, **kwargs):
+        """
+        [{
+            "card": <number>
+            "count": <number|optional>
+        }]
+        """
+        json_cards = json.loads(request.DATA.get('data'))
+        deck_id = kwargs.get('pk')
+        for card_data in json_cards:
+            card_id = card_data.get('card')
+            count = card_data.get('count')
+            if models.DeckCard.objects.filter(card__id=card_id).exists():
+                deck_card = models.DeckCard.objects.get(card__id=card_id)
+                if count == 0:
+                    deck_card.delete()
+                else:
+                    if not count:
+                        deck_card.count += 1
+                    else:
+                        deck_card.count = count
+                    deck_card.save()
+            else:
+                card = models.Card.objects.get(id=card_id)
+                deck = models.Deck.objects.get(id=deck_id)
+                models.DeckCard.objects.create(card=card, count=1, deck=deck)
+        return http.HttpResponse(json.dumps({}), mimetype='application/json')
 
     def get_queryset(self):
         if self.request.user.is_authenticated():
