@@ -60,5 +60,20 @@ class RegistrationView(generic.View):
     def dispatch(self, request, *args, **kwargs):
         return super(RegistrationView, self).dispatch(request, *args, **kwargs)
 
+    def get(self, request, *args, **kwargs):
+        username = request.GET.get('username')
+        if not username:
+            return http.HttpResponseServerError()
+        user = get_object_or_404(User, username=username)
+        if user:
+            return http.HttpResponse()
+        return http.HttpResponseServerError()
+
     def post(self, request, *args, **kwargs):
-        pass
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+        if username and password and email:
+            User.objects.create_user(username, email, password)
+            return http.HttpResponse()
+        return http.HttpResponseServerError()
