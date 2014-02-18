@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django import http
 from django.views import generic
@@ -12,6 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.viewsets import ModelViewSet
+
+import redis
 
 from mtgapp import models, serializers
 
@@ -65,6 +68,15 @@ class AuthenticationView(generic.View):
         login(request, user)
         response = self.user_response(user)
         return http.HttpResponse(json.dumps(response), content_type='application/json')
+
+
+class RegistrationView(generic.View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(RegistrationView, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        pass
 
 
 class CardViewSet(ModelViewSet):
@@ -132,6 +144,7 @@ class DeckViewSet(ModelViewSet):
         """
         json_cards = json.loads(request.DATA.get('data'))
         deck_id = kwargs.get('pk')
+        deck = models.Deck.objects.get(id=deck_id)
         for card_data in json_cards:
             card_id = card_data.get('card')
             count = card_data.get('count')
@@ -145,9 +158,9 @@ class DeckViewSet(ModelViewSet):
                     else:
                         deck_card.count = count
                     deck_card.save()
+
             else:
                 card = models.Card.objects.get(id=card_id)
-                deck = models.Deck.objects.get(id=deck_id)
                 models.DeckCard.objects.create(card=card, count=1, deck=deck)
         return http.HttpResponse(json.dumps({}), mimetype='application/json')
 
