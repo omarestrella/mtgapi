@@ -18,5 +18,7 @@ urlpatterns += patterns('',
 )
 
 urlpatterns += patterns('',
-    url(r'^auth/', views.AuthenticationView.as_view(), name='token_auth_view'),
+    url(r'^auth/$', views.AuthenticationView.as_view(), name='token_auth_view'),
+    url(r'^auth/logout/$', views.LogoutView.as_view(), name='logout_view'),
+    url(r'^auth/register/$', views.RegistrationView.as_view(), name='registration_view'),
 )
