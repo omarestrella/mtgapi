@@ -14,3 +14,4 @@ wsgiref==0.1.2
 django-filter==0.7
 django-dcors==0.1
 django-cors-headers==0.12
+gevent==0.13
