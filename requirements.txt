@@ -16,3 +16,4 @@ django-dcors==0.1
 django-cors-headers==0.12
 gevent==0.13
 greenlet==0.4
+gevent-socketio==0.2.1
