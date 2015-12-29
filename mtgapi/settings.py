@@ -64,11 +64,12 @@ ROOT_URLCONF = 'mtgapi.urls'
 WSGI_APPLICATION = 'mtgapi.wsgi.application'
 
 CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ORIGIN_REGEX_WHITELIST = (
-    '^http?://(\w+\.)?herokuapp\.com$',
-    '^http?://(\w+\.)?localhost:\d+$'
-)
+# CORS_ORIGIN_REGEX_WHITELIST = (
+#     '^http?://(\w+\.)?herokuapp\.com$',
+#     '^http?://(\w+\.)?localhost:\d+$'
+# )
 
 
 # Database
