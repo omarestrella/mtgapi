@@ -56,17 +56,18 @@ class Card(models.Model):
 
     name = models.CharField(max_length=255)
     text = models.TextField()
-    card_set = models.ForeignKey(CardSet, blank=True, null=True)
     cmc = models.PositiveSmallIntegerField(blank=True, null=True)
     type_name = models.CharField(max_length=255)
-    types = models.ManyToManyField(CardType, blank=True, null=True, related_name='card')
-    subtypes = models.ManyToManyField(CardSubtype, blank=True, null=True, related_name='card')
-    colors = models.ManyToManyField(CardColor, blank=True, null=True)
+    types = models.ManyToManyField(CardType, blank=True, related_name='card')
+    subtypes = models.ManyToManyField(CardSubtype, blank=True, related_name='card')
+    colors = models.ManyToManyField(CardColor, blank=True)
+    sets = models.ManyToManyField(CardSet, blank=True, related_name='card')
     layout = models.CharField(max_length=255, choices=LAYOUT_CHOICES)
     power = models.CharField(max_length=3, blank=True, null=True)
     toughness = models.CharField(max_length=3, blank=True, null=True)
     image_name = models.CharField(max_length=255)
     multiverse_id = models.IntegerField()
+    set_number = models.CharField(max_length=255, blank=True, null=True)
 
     @property
     def is_equipment(self):

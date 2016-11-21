@@ -52,17 +52,18 @@ class Command(BaseCommand):
             colors = models.CardColor.objects.filter(name__in=card.get('colors'))
             types = models.CardType.objects.filter(name__in=card.get('types'))
             subtypes = models.CardSubtype.objects.filter(name__in=card.get('subtypes', []))
-            card_set = models.CardSet.objects.get(code=card.get('set'))
+            sets = models.CardSet.objects.filter(code=card.get('set'))
 
             default_data = intersection(default_card_keys, card)
             default_data.update({
-                'card_set': card_set,
                 'type_name': card['type'],
                 'image_name': card['imageName'],
-                'multiverse_id': card['multiverseid']
+                'multiverse_id': card['multiverseid'],
+                'set_number': card.get('number', None)
             })
 
             card = models.Card.objects.create(**default_data)
+            card.sets.add(*sets)
             card.colors.add(*colors)
             card.types.add(*types)
             card.subtypes.add(*subtypes)

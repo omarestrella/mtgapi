@@ -63,17 +63,22 @@ class RegistrationView(generic.View):
     def get(self, request, *args, **kwargs):
         username = request.GET.get('username')
         if not username:
-            return http.HttpResponseServerError()
+            message = json.dumps(dict(error='Username not supplied'))
+            return http.HttpResponseServerError(message, content_type='application/json')
         user = get_object_or_404(User, username=username)
         if user:
-            return http.HttpResponse()
+            return http.HttpResponse(json.dumps({}), content_type='application/json')
         return http.HttpResponseServerError()
 
     def post(self, request, *args, **kwargs):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+        email = data.get('email')
+
         if username and password and email:
             User.objects.create_user(username, email, password)
-            return http.HttpResponse()
-        return http.HttpResponseServerError()
+            message = json.dumps(dict(message='Success'))
+            return http.HttpResponse(message, content_type='application/json')
+        message = json.dumps(dict(error='Error processing data'))
+        return http.HttpResponseServerError(message, content_type='application/json')

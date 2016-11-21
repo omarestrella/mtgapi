@@ -11,8 +11,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import permissions
-from rest_framework.decorators import action
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import api_view
+# from rest_framework.viewsets import ModelViewSet
+from rest_framework_json_api.views import ModelViewSet
 
 import redis
 
@@ -38,7 +39,7 @@ class CardViewSet(ModelViewSet):
     search_fields = ('name', 'text',)
 
     def name_filter(self, queryset, filter_field):
-        filter_args = self.request.QUERY_PARAMS.get(filter_field, '')
+        filter_args = self.request.query_params.get(filter_field, '')
         filter_args = non_empty_split(filter_args)
         if filter_args and len(filter_args) > 0:
             query = Q()
@@ -50,13 +51,13 @@ class CardViewSet(ModelViewSet):
         return queryset
 
     def set_filter(self, queryset):
-        set = self.request.QUERY_PARAMS.get('set', '')
+        set = self.request.query_params.get('set', '')
         if set and len(set) == 3:
             return queryset.filter(card_set__code__iexact=set)
         return queryset
 
     def cmc_filter(self, queryset):
-        cmc = self.request.QUERY_PARAMS.get('cmc', '');
+        cmc = self.request.query_params.get('cmc', '')
         if cmc:
             return queryset.filter(cmc=cmc)
         return queryset
@@ -78,6 +79,7 @@ class CardViewSet(ModelViewSet):
 
 class DeckViewSet(ModelViewSet):
     model = models.Deck
+    resource_name = 'decks'
     serializer_class = serializers.DeckSerializer
     permission_classes = (IsOwnerOrReadOnly,)
     paginate_by = 15
@@ -85,7 +87,7 @@ class DeckViewSet(ModelViewSet):
     max_paginate_by = 150
     search_fields = ('title',)
 
-    @action(methods=['POST'])
+    @api_view(http_method_names=['POST'])
     def update_cards(self, request, *args, **kwargs):
         """
         [{
@@ -120,3 +122,38 @@ class DeckViewSet(ModelViewSet):
             queryset = models.Deck.objects.filter(user=self.request.user)
             return queryset.order_by('title')
         return []
+
+
+class CardColorViewSet(ModelViewSet):
+    model = models.CardColor
+    queryset = models.CardColor.objects.all()
+    serializer_class = serializers.CardColorSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+    paginate_by = 25
+    paginate_by_param = 'page'
+    max_paginate_by = 150
+
+
+class CardTypeViewSet(ModelViewSet):
+    model = models.CardType
+    queryset = models.CardType.objects.all()
+    serializer_class = serializers.CardTypeSerializer
+    paginate_by = 25
+    paginate_by_param = 'page'
+    max_paginate_by = 150
+
+class CardSetViewSet(ModelViewSet):
+    model = models.CardSet
+    queryset = models.CardSet.objects.all()
+    serializer_class = serializers.CardSetSerializer
+    paginate_by = 25
+    paginate_by_param = 'page'
+    max_paginate_by = 150
+
+class CardSubtypeViewSet(ModelViewSet):
+    model = models.CardSubtype
+    queryset = models.CardSubtype.objects.all()
+    serializer_class = serializers.CardSubtypeSerializer
+    paginate_by = 25
+    paginate_by_param = 'page'
+    max_paginate_by = 150
