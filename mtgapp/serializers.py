@@ -59,7 +59,16 @@ class DeckCardSerializer(serializers.ModelSerializer):
 
 
 class DeckSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField(source='get_user', read_only=True)
     cards = DeckCardSerializer(many=True)
+
+    def get_user(self, obj):
+        user = models.User.objects.get(pk=obj.user.pk)
+        return {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }
 
     def create(self, validated_data):
         cards = validated_data.pop('cards')
