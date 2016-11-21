@@ -47,17 +47,19 @@ class LimitedCardSerializer(serializers.ModelSerializer):
 
 
 class DeckCardSerializer(serializers.ModelSerializer):
-    card = CardSerializer()
+    card = serializers.SerializerMethodField(source='get_card', read_only=True)
+
+    def get_card(self, obj):
+        queryset = models.Card.objects.get(pk=obj.card.pk)
+        return CardSerializer(queryset).data
 
     class Meta:
         model = models.DeckCard
-        fields = ('card', 'count')
+        fields = ('card', 'count',)
 
 
 class DeckSerializer(serializers.ModelSerializer):
-    included_serializers = {
-        'cards': DeckCardSerializer
-    }
+    cards = DeckCardSerializer(many=True)
 
     def create(self, validated_data):
         cards = validated_data.pop('cards')
@@ -70,4 +72,8 @@ class DeckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Deck
-        fields = ('id', 'title', 'private', 'user', 'cards')
+        fields = ('id', 'title', 'private', 'user', 'cards',)
+
+
+    class JSONAPIMeta:
+        included_resources = ('cards',)
