@@ -2,20 +2,12 @@ import json
 import logging
 
 from django import http
-from django.views import generic
 from django.db.models import Q
-from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework import permissions
 from rest_framework.decorators import api_view
-# from rest_framework.viewsets import ModelViewSet
-from rest_framework_json_api.views import ModelViewSet
-
-import redis
+from rest_framework.viewsets import ModelViewSet
+#from rest_framework_json_api.views import ModelViewSet
 
 from mtgapp import models, serializers
 
@@ -142,6 +134,7 @@ class CardTypeViewSet(ModelViewSet):
     paginate_by_param = 'page'
     max_paginate_by = 150
 
+
 class CardSetViewSet(ModelViewSet):
     model = models.CardSet
     queryset = models.CardSet.objects.all()
@@ -150,10 +143,20 @@ class CardSetViewSet(ModelViewSet):
     paginate_by_param = 'page'
     max_paginate_by = 150
 
+
 class CardSubtypeViewSet(ModelViewSet):
     model = models.CardSubtype
     queryset = models.CardSubtype.objects.all()
     serializer_class = serializers.CardSubtypeSerializer
+    paginate_by = 25
+    paginate_by_param = 'page'
+    max_paginate_by = 150
+
+
+class DeckCardViewSet(ModelViewSet):
+    model = models.DeckCard
+    queryset = models.DeckCard.objects.all()
+    serializer_class = serializers.DeckCardSerializer
     paginate_by = 25
     paginate_by_param = 'page'
     max_paginate_by = 150

@@ -1,5 +1,5 @@
-from rest_framework import pagination
-from rest_framework_json_api import serializers, relations
+from rest_framework import pagination, serializers
+#from rest_framework_json_api import serializers, relations
 # from rest_framework_json_api.relations import ResourceRelatedField
 
 from mtgapp import models
@@ -30,10 +30,10 @@ class CardSubtypeSerializer(serializers.ModelSerializer):
 
 
 class CardSerializer(serializers.ModelSerializer):
-    sets = relations.ResourceRelatedField(queryset=models.CardSet.objects, many=True)
-    types = relations.ResourceRelatedField(queryset=models.CardType.objects, many=True)
-    colors = relations.ResourceRelatedField(queryset=models.CardColor.objects, many=True)
-    subtypes = relations.ResourceRelatedField(queryset=models.CardSubtype.objects, many=True)
+    sets = CardSetSerializer(many=True, read_only=True)
+    types = CardTypeSerializer(many=True, read_only=True)
+    colors = CardColorSerializer(many=True, read_only=True)
+    subtypes = CardSubtypeSerializer(many=True, read_only=True)
 
     class Meta:
         model = models.Card
@@ -43,7 +43,7 @@ class CardSerializer(serializers.ModelSerializer):
 class LimitedCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Card
-        fields = ('id', 'name', 'text')
+        fields = ('id', 'name', 'text',)
 
 
 class DeckCardSerializer(serializers.ModelSerializer):
@@ -55,7 +55,7 @@ class DeckCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.DeckCard
-        fields = ('card', 'count',)
+        fields = ('id', 'card', 'count',)
 
 
 class DeckSerializer(serializers.ModelSerializer):

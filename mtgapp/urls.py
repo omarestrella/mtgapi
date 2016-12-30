@@ -10,6 +10,7 @@ router.register(r'card-colors', views.CardColorViewSet, 'card-color')
 router.register(r'card-sets', views.CardSetViewSet, 'card-set')
 router.register(r'card-subtypes', views.CardSubtypeViewSet, 'card-subtype')
 router.register(r'card-types', views.CardTypeViewSet, 'card-type')
+router.register(r'deck-cards', views.DeckCardViewSet, 'deck-card')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
