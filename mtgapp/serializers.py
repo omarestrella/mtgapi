@@ -86,3 +86,20 @@ class DeckSerializer(serializers.ModelSerializer):
 
     class JSONAPIMeta:
         included_resources = ('cards',)
+
+
+class GameSerializer(serializers.ModelSerializer):
+    users = serializers.SerializerMethodField(source='get_users', read_only=True)
+    decks = DeckSerializer(many=True, read_only=True)
+
+    def get_users(self, obj):
+        users = obj.users.all()
+        return [{
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        } for user in users]
+
+    class Meta:
+        model = models.Game
+        fields = '__all__'

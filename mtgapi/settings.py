@@ -54,8 +54,9 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
+    'django.contrib.sites',
     'django.contrib.staticfiles',
+    'channels',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
@@ -138,4 +139,14 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication'
     )
+}
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'asgi_redis.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('localhost', 6379)],
+        },
+        'ROUTING': 'mtgapi.routing.routing',
+    },
 }

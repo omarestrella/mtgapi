@@ -13,7 +13,8 @@ class AuthenticationView(generic.View):
     def user_response(self, user):
         return {
             'user': dict(id=user.id, username=user.username),
-            'token': user.auth_token.key
+            'token': user.auth_token.key,
+            'session': self.request.session.session_key
         }
 
     def authenticate_with_credentials(self, username, password):

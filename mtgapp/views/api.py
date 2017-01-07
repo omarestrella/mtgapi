@@ -160,3 +160,14 @@ class DeckCardViewSet(ModelViewSet):
     paginate_by = 25
     paginate_by_param = 'page'
     max_paginate_by = 150
+
+
+class GameViewSet(ModelViewSet):
+    model = models.Game
+    serializer_class = serializers.GameSerializer
+    paginate_by = 25
+    paginate_by_param = 'page'
+    max_paginate_by = 150
+
+    def get_queryset(self):
+        return models.Game.objects.filter(users__in=[self.request.user])

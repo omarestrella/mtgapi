@@ -90,3 +90,8 @@ class DeckCard(models.Model):
     card = models.ForeignKey(Card)
     count = models.PositiveSmallIntegerField()
     deck = models.ForeignKey(Deck, related_name='cards')
+
+
+class Game(models.Model):
+    users = models.ManyToManyField(User)
+    decks = models.ManyToManyField(Deck)
